@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ profile.display_name }}{% endblock %}
+
+{% block content %}
+    {% if profile.profile_picture %}
+        <img src="{{ profile.profile_picture.url }}" alt="Foto de perfil de {{ profile.display_name }}" width="120">
+    {% endif %}
+
+    <h1>{{ profile.display_name }}</h1>
+    <p>@{{ profile.user.username }}</p>
+
+    {% if profile.bio %}
+        <p>{{ profile.bio }}</p>
+    {% endif %}
+
+    {% if profile.main_category %}
+        <p>Tema: {{ profile.main_category.name }}</p>
+    {% endif %}
+
+    {% if profile.profile_tags.all %}
+        <p>
+            Tags:
+            {% for tag in profile.profile_tags.all %}
+                #{{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    {% if user == profile.user %}
+        <a href="{% url 'users:edit_profile' %}">Editar perfil</a>
+    {% endif %}
+{% endblock %}

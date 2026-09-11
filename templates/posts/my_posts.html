@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+
+{% block title %}Meus posts{% endblock %}
+
+{% block content %}
+    <h1>Meus posts</h1>
+
+    <a href="{% url 'posts:create_post' %}">Criar novo post</a>
+
+    {% if posts %}
+        {% for post in posts %}
+            <article>
+                <h2>{{ post.title }}</h2>
+
+                <p>Categoria: {{ post.category.name }}</p>
+
+                <p>Status: {{ post.get_status_display }}</p>
+
+                <p>Criado em: {{ post.created_at }}</p>
+            </article>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Você ainda não criou nenhum post.</p>
+    {% endif %}
+{% endblock %}
