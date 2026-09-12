@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ post.title }}{% endblock %}
+
+{% block content %}
+    <h1>{{ post.title }}</h1>
+    <p>por @{{ post.author.username }} · {{ post.category.name }}</p>
+
+    {% if post.cover_image %}
+        <img src="{{ post.cover_image.url }}" alt="Imagem de capa" width="300">
+    {% endif %}
+
+    <div>{{ post.content|linebreaks }}</div>
+
+    {% if post.tags.all %}
+        <p>
+            Tags:
+            {% for tag in post.tags.all %}
+                #{{ tag.name }}{% if not forloop.last %}, {% endif %}
+            {% endfor %}
+        </p>
+    {% endif %}
+
+    <form action="{% url 'posts:approve_post' post_id=post.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Aprovar</button>
+    </form>
+
+    <form action="{% url 'posts:reject_post' post_id=post.id %}" method="post" style="display:inline;">
+        {% csrf_token %}
+        <button type="submit">Rejeitar</button>
+    </form>
+
+    <p><a href="{% url 'posts:editorial_list' %}">Voltar</a></p>
+{% endblock %}

@@ -85,3 +85,9 @@ class Post(models.Model):
 
     def is_published(self):
         return self.status == self.Status.PUBLISHED
+
+    def can_be_edited(self):
+        return self.status in (self.Status.DRAFT, self.Status.REJECTED)
+
+    def can_be_sent_to_review(self):
+        return self.status in (self.Status.DRAFT, self.Status.REJECTED)

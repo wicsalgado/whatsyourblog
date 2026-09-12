@@ -4,5 +4,20 @@
 
 {% block content %}
     <h1>Bem-vindo ao portal</h1>
-    <p>Esta é uma página inicial temporária, só pra testarmos o fluxo de autenticação.</p>
+
+    {% if posts %}
+        {% for post in posts %}
+            <article>
+                <h2><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h2>
+                <p>
+                    por <a href="{% url 'users:profile' username=post.author.username %}">@{{ post.author.username }}</a>
+                    · {{ post.category.name }}
+                    · {{ post.views_count }} visualizações
+                </p>
+            </article>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Ainda não há publicações por aqui.</p>
+    {% endif %}
 {% endblock %}

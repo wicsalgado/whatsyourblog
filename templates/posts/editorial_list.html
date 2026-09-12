@@ -1,0 +1,21 @@
+{% extends 'base.html' %}
+
+{% block title %}Central Editorial{% endblock %}
+
+{% block content %}
+    <h1>Publicações aguardando aprovação</h1>
+
+    {% if posts %}
+        {% for post in posts %}
+            <article>
+                <h2>{{ post.title }}</h2>
+                <p>por @{{ post.author.username }}</p>
+                <p>Categoria: {{ post.category.name }}</p>
+                <a href="{% url 'posts:editorial_detail' post_id=post.id %}">Visualizar</a>
+            </article>
+            <hr>
+        {% endfor %}
+    {% else %}
+        <p>Nenhum post aguardando análise no momento.</p>
+    {% endif %}
+{% endblock %}

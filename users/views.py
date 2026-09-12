@@ -3,6 +3,8 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from django.shortcuts import get_object_or_404, redirect, render
 
+from posts.models import Post
+
 from .forms import ProfileEditForm, SignUpForm
 from .models import Profile
 
@@ -27,7 +29,8 @@ def signup(request):
 def profile(request, username):
     user = get_object_or_404(User, username=username)
     profile = get_object_or_404(Profile, user=user)
-    return render(request, 'users/profile.html', {'profile': profile})
+    posts = user.posts.filter(status=Post.Status.PUBLISHED).order_by('-published_at')
+    return render(request, 'users/profile.html', {'profile': profile, 'posts': posts})
 
 
 @login_required

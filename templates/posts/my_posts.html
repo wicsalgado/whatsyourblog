@@ -17,6 +17,17 @@
                 <p>Status: {{ post.get_status_display }}</p>
 
                 <p>Criado em: {{ post.created_at }}</p>
+
+                {% if post.can_be_edited %}
+                    <a href="{% url 'posts:edit_post' post_id=post.id %}">Editar</a>
+                {% endif %}
+
+                {% if post.can_be_sent_to_review %}
+                    <form action="{% url 'posts:send_to_review' post_id=post.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Enviar para análise</button>
+                    </form>
+                {% endif %}
             </article>
             <hr>
         {% endfor %}

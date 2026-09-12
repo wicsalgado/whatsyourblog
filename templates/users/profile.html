@@ -27,6 +27,15 @@
         </p>
     {% endif %}
 
+    <h2>Publicações</h2>
+    {% if posts %}
+        {% for post in posts %}
+            <p><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></p>
+        {% endfor %}
+    {% else %}
+        <p>Nenhuma publicação por enquanto.</p>
+    {% endif %}
+
     {% if user == profile.user %}
         <a href="{% url 'users:edit_profile' %}">Editar perfil</a>
     {% endif %}
