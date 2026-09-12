@@ -3,10 +3,13 @@
 {% block title %}Cadastro{% endblock %}
 
 {% block content %}
-    <h1>Criar conta</h1>
-    <form method="post">
-        {% csrf_token %}
-        {{ form.as_p }}
-        <button type="submit">Cadastrar</button>
-    </form>
+    <div class="form-card">
+        <h1>Criar conta</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Cadastrar</button>
+        </form>
+        <p class="form-footer">Já tem conta? <a href="{% url 'users:login' %}">Entrar</a></p>
+    </div>
 {% endblock %}

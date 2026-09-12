@@ -3,21 +3,56 @@
 {% block title %}Início{% endblock %}
 
 {% block content %}
-    <h1>Bem-vindo ao portal</h1>
+    <h1 class="page-title">Bem-vindo ao What's Your Blog</h1>
 
-    {% if posts %}
-        {% for post in posts %}
-            <article>
-                <h2><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h2>
-                <p>
-                    por <a href="{% url 'users:profile' username=post.author.username %}">@{{ post.author.username }}</a>
-                    · {{ post.category.name }}
-                    · {{ post.views_count }} visualizações
-                </p>
-            </article>
-            <hr>
-        {% endfor %}
-    {% else %}
-        <p>Ainda não há publicações por aqui.</p>
-    {% endif %}
+    <form method="get" action="{% url 'posts:home' %}" class="search-bar">
+        <input type="text" name="q" value="{{ query }}" placeholder="Buscar posts...">
+
+        <select name="categoria">
+            <option value="">Todas as categorias</option>
+            {% for category in categories %}
+                <option value="{{ category.id }}" {% if category.id == selected_category %}selected{% endif %}>
+                    {{ category.name }}
+                </option>
+            {% endfor %}
+        </select>
+
+        <button type="submit">Buscar</button>
+
+        {% if query or selected_category or selected_tag %}
+            <a href="{% url 'posts:home' %}" class="clear-link">Limpar filtros</a>
+        {% endif %}
+    </form>
+
+    <div class="layout">
+        <aside class="sidebar">
+            <h2>Tags em alta</h2>
+            <div class="sidebar-tags">
+                {% for tag in trending_tags %}
+                    <a href="?tag={{ tag.id }}" class="tag-pill">#{{ tag.name }} · {{ tag.post_count }}</a>
+                {% empty %}
+                    <p class="empty-message">Nenhuma tag em destaque ainda.</p>
+                {% endfor %}
+            </div>
+        </aside>
+
+        <div>
+            {% if posts %}
+                <div class="post-grid">
+                    {% for post in posts %}
+                        <article class="post-card">
+                            <h2><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h2>
+                            <p class="post-meta">
+                                por <a href="{% url 'users:profile' username=post.author.username %}">@{{ post.author.username }}</a>
+                                · {{ post.category.name }}
+                            </p>
+                            <p class="post-meta">{{ post.views_count }} visualizações</p>
+                        </article>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <p class="empty-message">Nenhuma publicação encontrada.</p>
+            {% endif %}
+        </div>
+    </div>
 {% endblock %}

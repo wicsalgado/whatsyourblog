@@ -1,13 +1,13 @@
 from functools import wraps
 
+from comments.forms import CommentForm
 from django.contrib.auth.decorators import login_required
-from django.db.models import F
+from django.db.models import Count, F, Q
 from django.shortcuts import get_object_or_404, redirect, render
 from django.utils import timezone
-from comments.forms import CommentForm
 
 from .forms import PostForm
-from .models import Post
+from .models import Category, Post, Tag
 
 
 def staff_required(view_func):
@@ -20,8 +20,39 @@ def staff_required(view_func):
 
 
 def home(request):
-    posts = Post.objects.filter(status=Post.Status.PUBLISHED).order_by('-views_count', '-published_at')
-    return render(request, 'posts/home.html', {'posts': posts})
+    posts = Post.objects.filter(status=Post.Status.PUBLISHED)
+
+    query = request.GET.get('q', '').strip()
+    if query:
+        posts = posts.filter(Q(title__icontains=query) | Q(content__icontains=query))
+
+    category_id = request.GET.get('categoria')
+    if category_id:
+        posts = posts.filter(category_id=category_id)
+
+    tag_id = request.GET.get('tag')
+    if tag_id:
+        posts = posts.filter(tags__id=tag_id)
+
+    posts = posts.order_by('-views_count', '-published_at').distinct()
+
+    trending_tags = (
+        Tag.objects.annotate(
+            post_count=Count('posts', filter=Q(posts__status=Post.Status.PUBLISHED))
+        )
+        .filter(post_count__gt=0)
+        .order_by('-post_count')[:10]
+    )
+
+    context = {
+        'posts': posts,
+        'categories': Category.objects.all(),
+        'trending_tags': trending_tags,
+        'query': query,
+        'selected_category': int(category_id) if category_id else None,
+        'selected_tag': int(tag_id) if tag_id else None,
+    }
+    return render(request, 'posts/home.html', context)
 
 
 @login_required

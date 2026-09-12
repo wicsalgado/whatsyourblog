@@ -1,28 +1,37 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>{% block title %}Portal{% endblock %}</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}What's Your Blog{% endblock %}</title>
+    <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
-    <nav>
-        {% if user.is_authenticated %}
-            <a href="{% url 'users:profile' username=user.username %}">Olá, {{ user.username }}</a>
-            <a href="{% url 'posts:my_posts' %}">Meus posts</a>
-            {% if user.is_staff %}
-                <a href="{% url 'posts:editorial_list' %}">Central Editorial</a>
-            {% endif %}
-            <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
-                {% csrf_token %}
-                <button type="submit">Sair</button>
-            </form>
-        {% else %}
-            <a href="{% url 'users:login' %}">Entrar</a>
-            <a href="{% url 'users:signup' %}">Cadastrar-se</a>
-        {% endif %}
-    </nav>
+    <header class="navbar">
+        <div class="navbar-inner">
+            <a class="navbar-logo" href="{% url 'posts:home' %}">what's your blog</a>
 
-    <main>
+            <div class="navbar-links">
+                {% if user.is_authenticated %}
+                    <a href="{% url 'users:profile' username=user.username %}">Olá, {{ user.username }}</a>
+                    <a href="{% url 'posts:my_posts' %}">Meus posts</a>
+                    {% if user.is_staff %}
+                        <a href="{% url 'posts:editorial_list' %}">Central Editorial</a>
+                    {% endif %}
+                    <form action="{% url 'users:logout' %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                        <button type="submit">Sair</button>
+                    </form>
+                {% else %}
+                    <a href="{% url 'users:login' %}">Entrar</a>
+                    <a href="{% url 'users:signup' %}" class="btn-link">Cadastrar-se</a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    <main class="container">
         {% block content %}{% endblock %}
     </main>
 </body>

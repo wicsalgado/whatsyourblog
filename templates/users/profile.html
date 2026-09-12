@@ -3,40 +3,52 @@
 {% block title %}{{ profile.display_name }}{% endblock %}
 
 {% block content %}
-    {% if profile.profile_picture %}
-        <img src="{{ profile.profile_picture.url }}" alt="Foto de perfil de {{ profile.display_name }}" width="120">
-    {% endif %}
+    <div class="profile-header">
+        {% if profile.profile_picture %}
+            <img src="{{ profile.profile_picture.url }}" alt="Foto de perfil de {{ profile.display_name }}" class="profile-picture">
+        {% else %}
+            <div class="profile-picture-placeholder">{{ profile.display_name|first|upper }}</div>
+        {% endif %}
 
-    <h1>{{ profile.display_name }}</h1>
-    <p>@{{ profile.user.username }}</p>
+        <div class="profile-info">
+            <h1>{{ profile.display_name }}</h1>
+            <p class="profile-username">@{{ profile.user.username }}</p>
 
-    {% if profile.bio %}
-        <p>{{ profile.bio }}</p>
-    {% endif %}
+            {% if profile.bio %}
+                <p>{{ profile.bio }}</p>
+            {% endif %}
 
-    {% if profile.main_category %}
-        <p>Tema: {{ profile.main_category.name }}</p>
-    {% endif %}
+            {% if profile.main_category %}
+                <p>Tema: {{ profile.main_category.name }}</p>
+            {% endif %}
 
-    {% if profile.profile_tags.all %}
-        <p>
-            Tags:
-            {% for tag in profile.profile_tags.all %}
-                #{{ tag.name }}{% if not forloop.last %}, {% endif %}
-            {% endfor %}
-        </p>
-    {% endif %}
+            {% if profile.profile_tags.all %}
+                <div class="profile-tags">
+                    {% for tag in profile.profile_tags.all %}
+                        <span class="tag-pill">#{{ tag.name }}</span>
+                    {% endfor %}
+                </div>
+            {% endif %}
 
-    <h2>Publicações</h2>
-    {% if posts %}
-        {% for post in posts %}
-            <p><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></p>
-        {% endfor %}
-    {% else %}
-        <p>Nenhuma publicação por enquanto.</p>
-    {% endif %}
+            {% if user == profile.user %}
+                <p style="margin-top: 12px;"><a href="{% url 'users:edit_profile' %}">Editar perfil</a></p>
+            {% endif %}
+        </div>
+    </div>
 
-    {% if user == profile.user %}
-        <a href="{% url 'users:edit_profile' %}">Editar perfil</a>
-    {% endif %}
+    <div class="profile-posts">
+        <h2>Publicações</h2>
+        {% if posts %}
+            <div class="post-grid">
+                {% for post in posts %}
+                    <article class="post-card">
+                        <h2><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h2>
+                        <p class="post-meta">{{ post.category.name }} · {{ post.views_count }} visualizações</p>
+                    </article>
+                {% endfor %}
+            </div>
+        {% else %}
+            <p class="empty-message">Nenhuma publicação por enquanto.</p>
+        {% endif %}
+    </div>
 {% endblock %}

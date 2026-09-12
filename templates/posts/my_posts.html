@@ -3,35 +3,33 @@
 {% block title %}Meus posts{% endblock %}
 
 {% block content %}
-    <h1>Meus posts</h1>
-
-    <a href="{% url 'posts:create_post' %}">Criar novo post</a>
+    <h1 class="page-title">Meus posts</h1>
+    <p><a href="{% url 'posts:create_post' %}" class="btn-link">Criar novo post</a></p>
 
     {% if posts %}
-        {% for post in posts %}
-            <article>
-                <h2>{{ post.title }}</h2>
+        <div class="post-grid">
+            {% for post in posts %}
+                <article class="post-card">
+                    <h2>{{ post.title }}</h2>
+                    <p class="post-meta">{{ post.category.name }} · {{ post.created_at|date:"d/m/Y" }}</p>
+                    <p><span class="status-badge status-{{ post.status }}">{{ post.get_status_display }}</span></p>
 
-                <p>Categoria: {{ post.category.name }}</p>
+                    <div class="action-row">
+                        {% if post.can_be_edited %}
+                            <a href="{% url 'posts:edit_post' post_id=post.id %}" class="btn-link">Editar</a>
+                        {% endif %}
 
-                <p>Status: {{ post.get_status_display }}</p>
-
-                <p>Criado em: {{ post.created_at }}</p>
-
-                {% if post.can_be_edited %}
-                    <a href="{% url 'posts:edit_post' post_id=post.id %}">Editar</a>
-                {% endif %}
-
-                {% if post.can_be_sent_to_review %}
-                    <form action="{% url 'posts:send_to_review' post_id=post.id %}" method="post" style="display:inline;">
-                        {% csrf_token %}
-                        <button type="submit">Enviar para análise</button>
-                    </form>
-                {% endif %}
-            </article>
-            <hr>
-        {% endfor %}
+                        {% if post.can_be_sent_to_review %}
+                            <form action="{% url 'posts:send_to_review' post_id=post.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Enviar para análise</button>
+                            </form>
+                        {% endif %}
+                    </div>
+                </article>
+            {% endfor %}
+        </div>
     {% else %}
-        <p>Você ainda não criou nenhum post.</p>
+        <p class="empty-message">Você ainda não criou nenhum post.</p>
     {% endif %}
 {% endblock %}

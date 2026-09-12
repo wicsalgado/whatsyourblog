@@ -3,15 +3,13 @@
 {% block title %}Editar post{% endblock %}
 
 {% block content %}
-<h1>Editar post</h1>
-
-<form method="post" enctype="multipart/form-data">
-    {% csrf_token %}
-
-    {{ form.as_p }}
-
-    <button type="submit">Salvar alterações</button>
-</form>
-
-<a href="{% url 'posts:my_posts' %}">Voltar para meus posts</a>
+    <div class="form-card form-card--wide">
+        <h1>Editar post</h1>
+        <form method="post" enctype="multipart/form-data">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit">Salvar alterações</button>
+        </form>
+        <p class="form-footer"><a href="{% url 'posts:my_posts' %}">Voltar para meus posts</a></p>
+    </div>
 {% endblock %}
