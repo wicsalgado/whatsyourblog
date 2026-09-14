@@ -10,21 +10,30 @@
         <div class="post-grid">
             {% for post in posts %}
                 <article class="post-card">
-                    <h2>{{ post.title }}</h2>
-                    <p class="post-meta">{{ post.category.name }} · {{ post.created_at|date:"d/m/Y" }}</p>
-                    <p><span class="status-badge status-{{ post.status }}">{{ post.get_status_display }}</span></p>
+                    {% if post.cover_image %}
+                        <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="post-card-image">
+                    {% else %}
+                        <div class="post-card-image-placeholder"></div>
+                    {% endif %}
+                    <div class="post-card-body">
+                        <span class="category-badge">{{ post.category.name }}</span>
+                        <h2>{{ post.title }}</h2>
+                        <p class="post-excerpt">{{ post.content|truncatewords:18 }}</p>
+                        <p class="post-meta">{{ post.created_at|date:"d/m/Y" }}</p>
+                        <p><span class="status-badge status-{{ post.status }}">{{ post.get_status_display }}</span></p>
 
-                    <div class="action-row">
-                        {% if post.can_be_edited %}
-                            <a href="{% url 'posts:edit_post' post_id=post.id %}" class="btn-link">Editar</a>
-                        {% endif %}
+                        <div class="action-row">
+                            {% if post.can_be_edited %}
+                                <a href="{% url 'posts:edit_post' post_id=post.id %}" class="btn-link">Editar</a>
+                            {% endif %}
 
-                        {% if post.can_be_sent_to_review %}
-                            <form action="{% url 'posts:send_to_review' post_id=post.id %}" method="post">
-                                {% csrf_token %}
-                                <button type="submit">Enviar para análise</button>
-                            </form>
-                        {% endif %}
+                            {% if post.can_be_sent_to_review %}
+                                <form action="{% url 'posts:send_to_review' post_id=post.id %}" method="post">
+                                    {% csrf_token %}
+                                    <button type="submit">Enviar para análise</button>
+                                </form>
+                            {% endif %}
+                        </div>
                     </div>
                 </article>
             {% endfor %}

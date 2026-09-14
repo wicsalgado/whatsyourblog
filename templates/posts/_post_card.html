@@ -1,0 +1,16 @@
+<article class="post-card">
+    {% if post.cover_image %}
+        <img src="{{ post.cover_image.url }}" alt="{{ post.title }}" class="post-card-image">
+    {% else %}
+        <div class="post-card-image-placeholder"></div>
+    {% endif %}
+    <div class="post-card-body">
+        <span class="category-badge">{{ post.category.name }}</span>
+        <h2><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h2>
+        <p class="post-excerpt">{{ post.content|truncatewords:18 }}</p>
+        <p class="post-meta">
+            por <a href="{% url 'users:profile' username=post.author.username %}">@{{ post.author.username }}</a>
+            · {{ post.views_count }} visualizações
+        </p>
+    </div>
+</article>

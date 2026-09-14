@@ -6,7 +6,7 @@
     <h1 class="page-title">Bem-vindo ao What's Your Blog</h1>
 
     <form method="get" action="{% url 'posts:home' %}" class="search-bar">
-        <input type="text" name="q" value="{{ query }}" placeholder="Buscar posts...">
+        <input type="text" name="q" value="{{ query }}" placeholder="🔍 Pesquisar posts, blogs ou tags...">
 
         <select name="categoria">
             <option value="">Todas as categorias</option>
@@ -26,7 +26,7 @@
 
     <div class="layout">
         <aside class="sidebar">
-            <h2>Tags em alta</h2>
+            <h2 class="section-title">Tags em alta</h2>
             <div class="sidebar-tags">
                 {% for tag in trending_tags %}
                     <a href="?tag={{ tag.id }}" class="tag-pill">#{{ tag.name }} · {{ tag.post_count }}</a>
@@ -40,14 +40,7 @@
             {% if posts %}
                 <div class="post-grid">
                     {% for post in posts %}
-                        <article class="post-card">
-                            <h2><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h2>
-                            <p class="post-meta">
-                                por <a href="{% url 'users:profile' username=post.author.username %}">@{{ post.author.username }}</a>
-                                · {{ post.category.name }}
-                            </p>
-                            <p class="post-meta">{{ post.views_count }} visualizações</p>
-                        </article>
+                        {% include 'posts/_post_card.html' %}
                     {% endfor %}
                 </div>
             {% else %}

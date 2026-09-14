@@ -37,14 +37,11 @@
     </div>
 
     <div class="profile-posts">
-        <h2>Publicações</h2>
+        <h2 class="section-title">Publicações</h2>
         {% if posts %}
             <div class="post-grid">
                 {% for post in posts %}
-                    <article class="post-card">
-                        <h2><a href="{% url 'posts:post_detail' post_id=post.id %}">{{ post.title }}</a></h2>
-                        <p class="post-meta">{{ post.category.name }} · {{ post.views_count }} visualizações</p>
-                    </article>
+                    {% include 'posts/_post_card.html' %}
                 {% endfor %}
             </div>
         {% else %}

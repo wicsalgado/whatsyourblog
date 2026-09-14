@@ -5,12 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{% block title %}What's Your Blog{% endblock %}</title>
+    <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='24' fill='%236c5ce7'/%3E%3Ctext x='50' y='68' font-size='58' font-family='sans-serif' font-weight='bold' fill='white' text-anchor='middle'%3EW%3C/text%3E%3C/svg%3E">
     <link rel="stylesheet" href="{% static 'css/main.css' %}">
 </head>
 <body>
     <header class="navbar">
         <div class="navbar-inner">
-            <a class="navbar-logo" href="{% url 'posts:home' %}">what's your blog</a>
+            <a class="navbar-logo" href="{% url 'posts:home' %}">
+                <span class="logo-badge">W</span>
+                What's Your Blog?
+            </a>
 
             <div class="navbar-links">
                 {% if user.is_authenticated %}
