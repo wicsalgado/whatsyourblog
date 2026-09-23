@@ -357,8 +357,6 @@ título ou conteúdo do post (usando `Q()` e `icontains`) e filtrar por categori
 de forma combinada ou isolada. Escolhemos título e conteúdo como campos de busca porque são
 os dados mais relevantes para um leitor localizar um post específico dentro do portal.
 
-Commit de referência: [busca e filtro implementados](https://github.com/wicsalgado/whatsyourblog/commit/b4b5bbd8912743229d07cb00837e8bace5b6dd7b)
-
 ### Feature 2 — Validação Customizada
 
 Implementada em `posts/forms.py`, no método `clean_content()` do `PostForm`: um post não pode
