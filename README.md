@@ -347,3 +347,24 @@ python manage.py check
 Coletar arquivos estáticos:
 
 python manage.py collectstatic
+
+## Features obrigatórias da P1
+
+### Feature 1 — Busca e Filtro
+
+Implementada na página inicial (`posts/views.py`, função `home`). O usuário pode buscar por
+título ou conteúdo do post (usando `Q()` e `icontains`) e filtrar por categoria via `<select>`,
+de forma combinada ou isolada. Escolhemos título e conteúdo como campos de busca porque são
+os dados mais relevantes para um leitor localizar um post específico dentro do portal.
+
+Commit de referência: [busca e filtro implementados](https://github.com/wicsalgado/whatsyourblog/commit/b4b5bbd8912743229d07cb00837e8bace5b6dd7b)
+
+### Feature 2 — Validação Customizada
+
+Implementada em `posts/forms.py`, no método `clean_content()` do `PostForm`: um post não pode
+ter conteúdo com menos de 50 caracteres. Escolhemos essa regra porque, sem ela, seria possível
+publicar um post praticamente vazio, o que vai contra a proposta do projeto de ser um portal de
+conteúdo real — a validação garante um mínimo de substância editorial já na criação do post,
+antes mesmo de chegar à análise da administradora.
+
+Commit: `feature 2 que o professor pediu em sala (prova)`
